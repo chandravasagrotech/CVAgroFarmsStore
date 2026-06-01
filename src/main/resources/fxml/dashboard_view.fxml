@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.cvagrofarmsstore.controllers.DashboardController"
+            fitToWidth="true"
+            styleClass="content-area"
+            style="-fx-background-color: transparent; -fx-background: transparent;">
+
+    <VBox spacing="24" styleClass="content-area">
+
+        <!-- ── Page header ── -->
+        <VBox spacing="2">
+            <Label text="Dashboard" styleClass="page-title"/>
+            <Label text="Store overview at a glance" styleClass="page-subtitle"/>
+        </VBox>
+
+        <Separator/>
+
+        <!-- ── Stat cards row ── -->
+        <HBox spacing="16">
+            <VBox styleClass="card" spacing="8" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <Label text="📦  Total Products" styleClass="label-muted"/>
+                <Label fx:id="lblTotalProducts" text="—"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblCategoryCount" text="— categories" styleClass="label-muted"/>
+            </VBox>
+
+            <VBox styleClass="card" spacing="8" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <Label text="⚠  Low Stock Items" styleClass="label-muted"/>
+                <Label fx:id="lblLowStock" text="—"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblLowStockNames" text="" styleClass="label-muted" wrapText="true"/>
+            </VBox>
+
+            <VBox styleClass="card" spacing="8" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <Label text="🛒  Today's Sales" styleClass="label-muted"/>
+                <Label fx:id="lblTodayRevenue" text="₱ 0.00"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblTodayTxCount" text="0 transactions" styleClass="label-muted"/>
+            </VBox>
+
+            <VBox styleClass="card" spacing="8" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                <Label text="💰  Total Revenue" styleClass="label-muted"/>
+                <Label fx:id="lblTotalRevenue" text="₱ 0.00"
+                       style="-fx-font-size: 32px; -fx-font-weight: bold;"/>
+                <Label fx:id="lblTotalTxCount" text="0 transactions" styleClass="label-muted"/>
+            </VBox>
+        </HBox>
+
+        <!-- ── Low stock table ── -->
+        <VBox styleClass="card" spacing="10">
+            <Label text="Low Stock Products" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+            <Separator/>
+            <TableView fx:id="tblLowStock" prefHeight="300">
+                <placeholder><Label text="All products are sufficiently stocked ✔" styleClass="label-muted"/></placeholder>
+                <columns>
+                    <TableColumn fx:id="colLsProdId"  text="Product ID"    prefWidth="130"/>
+                    <TableColumn fx:id="colLsName"     text="Product Name"  prefWidth="240"/>
+                    <TableColumn fx:id="colLsStock"    text="Current Stock" prefWidth="120"/>
+                    <TableColumn fx:id="colLsMinAlert" text="Min Alert"     prefWidth="100"/>
+                    <TableColumn fx:id="colLsStatus"   text="Status"        prefWidth="110"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+    </VBox>
+</ScrollPane>

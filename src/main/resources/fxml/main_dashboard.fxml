@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cvagrofarmsstore.controllers.MainDashboardController"
+      stylesheets="@../styles/theme.css"
+      prefWidth="1100" prefHeight="720"
+      style="-fx-background-color: #CC2F00;">
+
+    <!-- ── Custom Title Bar ── -->
+    <HBox fx:id="titleBar"
+          style="-fx-background-color: #B02800; -fx-padding: 0 8 0 0;"
+          alignment="CENTER_LEFT"
+          minHeight="36" maxHeight="36"
+          onMousePressed="#onTitleBarPressed"
+          onMouseDragged="#onTitleBarDragged">
+
+        <HBox alignment="CENTER_LEFT" spacing="8" HBox.hgrow="ALWAYS"
+              style="-fx-padding: 0 0 0 16;">
+            <Label text="🌿 CVAgroFarmsStore"
+                   style="-fx-text-fill: #FFFFFF; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+            <Label text="— Agribusiness Manager"
+                   style="-fx-text-fill: #FFCCBC; -fx-font-size: 11px;"/>
+        </HBox>
+
+        <Button fx:id="btnMinimize" text="─" onAction="#minimizeWindow"
+                style="-fx-background-color: transparent; -fx-text-fill: #FFFFFF;
+                       -fx-font-size: 13px; -fx-cursor: hand;
+                       -fx-padding: 4 14 4 14; -fx-background-radius: 0;"/>
+        <Button fx:id="btnMaximize" text="□" onAction="#maximizeWindow"
+                style="-fx-background-color: transparent; -fx-text-fill: #FFFFFF;
+                       -fx-font-size: 13px; -fx-cursor: hand;
+                       -fx-padding: 4 14 4 14; -fx-background-radius: 0;"/>
+        <Button fx:id="btnClose" text="✕" onAction="#closeWindow"
+                style="-fx-background-color: transparent; -fx-text-fill: #FFFFFF;
+                       -fx-font-size: 13px; -fx-cursor: hand;
+                       -fx-padding: 4 14 4 14; -fx-background-radius: 0;"/>
+    </HBox>
+
+    <!-- ── Main layout ── -->
+    <BorderPane VBox.vgrow="ALWAYS">
+
+        <left>
+            <VBox styleClass="sidebar" prefWidth="210" spacing="0">
+                <VBox styleClass="sidebar-header" spacing="3">
+                    <Label text="🌿 CVAgroFarms" styleClass="sidebar-title"/>
+                    <Label text="Store Management" styleClass="sidebar-subtitle"/>
+                </VBox>
+                <Separator/>
+                <VBox spacing="2" VBox.vgrow="ALWAYS">
+                    <VBox.margin><Insets top="8"/></VBox.margin>
+                    <Button fx:id="btnNavDashboard" text="📊  Dashboard"
+                            styleClass="nav-button" onAction="#showDashboard" maxWidth="Infinity"/>
+                    <Button fx:id="btnNavInventory" text="📦  Inventory"
+                            styleClass="nav-button" onAction="#showInventory" maxWidth="Infinity"/>
+                    <Button fx:id="btnNavSales" text="🛒  Sales"
+                            styleClass="nav-button" onAction="#showSales" maxWidth="Infinity"/>
+                </VBox>
+                <VBox styleClass="status-bar" spacing="2">
+                    <Label fx:id="lblDbStatus" text="● Database: Initializing…" styleClass="status-warn"/>
+                    <Label fx:id="lblVersion"  text="v1.0.0" styleClass="label-muted"/>
+                </VBox>
+            </VBox>
+        </left>
+
+        <center>
+            <StackPane fx:id="contentArea" styleClass="content-area"/>
+        </center>
+
+    </BorderPane>
+
+</VBox>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cvagrofarmsstore.controllers.SetupWizardController"
+      stylesheets="@../styles/theme.css"
+      spacing="0"
+      prefWidth="560" prefHeight="480"
+      styleClass="content-area">
+
+    <!-- ── Header ── -->
+    <VBox spacing="6" style="-fx-background-color: #B02800; -fx-padding: 32 36 28 36;">
+        <Label text="🌿  Welcome to CVAgroFarmsStore" styleClass="page-title"/>
+        <Label text="Let's get your agribusiness store set up. Choose an option below to begin."
+               styleClass="page-subtitle" wrapText="true"/>
+    </VBox>
+
+    <Separator/>
+
+    <!-- ── Options ── -->
+    <VBox spacing="16" style="-fx-padding: 32 36 24 36;" VBox.vgrow="ALWAYS">
+
+        <!-- Option A -->
+        <VBox styleClass="card" spacing="12">
+            <HBox spacing="14" alignment="CENTER_LEFT">
+                <Label text="🆕" style="-fx-font-size: 28px;"/>
+                <VBox spacing="4">
+                    <Label text="Create a Fresh Agribusiness Store" styleClass="page-title"
+                           style="-fx-font-size: 14px;"/>
+                    <Label text="Choose a folder where your new database will be created. Perfect for first-time setup."
+                           styleClass="label-muted" wrapText="true"/>
+                </VBox>
+            </HBox>
+            <Button text="📁  Choose Folder &amp; Create"
+                    styleClass="btn-primary"
+                    onAction="#onCreateFresh"/>
+        </VBox>
+
+        <!-- Option B -->
+        <VBox styleClass="card" spacing="12">
+            <HBox spacing="14" alignment="CENTER_LEFT">
+                <Label text="📂" style="-fx-font-size: 28px;"/>
+                <VBox spacing="4">
+                    <Label text="Import / Link Existing Data File" styleClass="page-title"
+                           style="-fx-font-size: 14px;"/>
+                    <Label text="Already have a CVAgroFarms database? Locate your existing .xlsx file to continue where you left off."
+                           styleClass="label-muted" wrapText="true"/>
+                </VBox>
+            </HBox>
+            <Button text="🔗  Browse &amp; Link Existing File"
+                    styleClass="btn-secondary"
+                    onAction="#onImportExisting"/>
+        </VBox>
+
+    </VBox>
+
+    <!-- ── Status bar ── -->
+    <HBox style="-fx-padding: 12 36 16 36;" alignment="CENTER_LEFT" spacing="10">
+        <Label fx:id="lblStatus" text="" styleClass="label-muted"
+               wrapText="true" HBox.hgrow="ALWAYS"/>
+        <ProgressIndicator fx:id="progressIndicator"
+                           prefWidth="20" prefHeight="20"
+                           visible="false" managed="false"/>
+    </HBox>
+
+</VBox>

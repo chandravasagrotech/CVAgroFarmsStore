@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.cvagrofarmsstore.controllers.InventoryController"
+            fitToWidth="true"
+            styleClass="content-area"
+            style="-fx-background-color: transparent; -fx-background: transparent;">
+
+    <VBox spacing="16" styleClass="content-area">
+
+        <!-- ── Page header ── -->
+        <HBox alignment="CENTER_LEFT" spacing="12">
+            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                <Label text="Inventory" styleClass="page-title"/>
+                <Label text="Manage products and stock levels" styleClass="page-subtitle"/>
+            </VBox>
+            <Button text="＋  Add Category"  styleClass="btn-secondary" onAction="#openAddCategoryPanel"/>
+            <Button text="＋  Add Product"   styleClass="btn-primary"   onAction="#openAddProductPanel"/>
+            <Button text="✏  Update Stock"  styleClass="btn-secondary" onAction="#openUpdateStockPanel"/>
+        </HBox>
+
+        <Separator/>
+
+        <!-- ── Search + date filter bar ── -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="txtSearch"
+                       promptText="🔍  Search by name or ID…"
+                       prefWidth="240"
+                       onKeyReleased="#onSearch"/>
+            <Label text="From:" styleClass="label-muted"/>
+            <DatePicker fx:id="dpFrom" promptText="Start date" prefWidth="140" onAction="#onDateFilter"/>
+            <Label text="To:" styleClass="label-muted"/>
+            <DatePicker fx:id="dpTo" promptText="End date" prefWidth="140" onAction="#onDateFilter"/>
+            <Button text="✕" onAction="#clearDateFilter" styleClass="btn-danger" prefWidth="28" prefHeight="28"/>
+            <Label fx:id="lblLowStockWarning" text="⚠  Low stock items detected"
+                   styleClass="status-warn" visible="false" managed="false"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="lblProductCount" text="0 products" styleClass="label-muted"/>
+        </HBox>
+
+        <!-- ── Products TableView ── -->
+        <TableView fx:id="tblProducts" prefHeight="380">
+            <placeholder><Label text="No products found." styleClass="label-muted"/></placeholder>
+            <columns>
+                <TableColumn fx:id="colProdId"      text="Product ID"    prefWidth="110"/>
+                <TableColumn fx:id="colCatId"        text="Category"      prefWidth="100"/>
+                <TableColumn fx:id="colProdName"     text="Product Name"  prefWidth="200"/>
+                <TableColumn fx:id="colPrice"        text="Price (₱)"     prefWidth="90"/>
+                <TableColumn fx:id="colStock"        text="Stock"         prefWidth="70"/>
+                <TableColumn fx:id="colMinAlert"     text="Min Alert"     prefWidth="80"/>
+                <TableColumn fx:id="colLastUpdated"  text="Prev Update"   prefWidth="180"/>
+                <TableColumn fx:id="colLatestUpdate" text="Latest Update" prefWidth="180"/>
+                <TableColumn fx:id="colStockStatus"  text="Status"        prefWidth="110"/>
+            </columns>
+        </TableView>
+
+        <!-- ── Update Stock panel ── -->
+        <VBox fx:id="updateStockPanel" styleClass="card" spacing="14"
+              visible="false" managed="false">
+            <Label text="Update Stock" styleClass="page-title"/>
+            <Separator/>
+            <GridPane hgap="16" vgap="12">
+                <Label text="Product:"        GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <ComboBox fx:id="cbUpdateProduct" prefWidth="280" promptText="Select product…"
+                          onAction="#onUpdateProductSelected"
+                          GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="Current Stock:"  GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="lblCurrentStock" text="—"
+                       style="-fx-font-weight: bold; -fx-font-size: 14px;"
+                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="Qty to Add:"     GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Spinner fx:id="spnNewStockQty" editable="true" prefWidth="160"
+                         GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Label text="New Stock Total:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <Label fx:id="lblNewStockTotal" text="—"
+                       style="-fx-font-weight: bold; -fx-font-size: 14px;"
+                       GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            </GridPane>
+            <HBox spacing="10">
+                <Button text="💾  Save Update" styleClass="btn-primary" onAction="#saveStockUpdate"/>
+                <Button text="✕  Cancel"       styleClass="btn-danger"  onAction="#closeUpdateStockPanel"/>
+            </HBox>
+        </VBox>
+
+        <!-- ── Add Product panel ── -->
+        <VBox fx:id="addProductPanel" styleClass="card" spacing="14"
+              visible="false" managed="false">
+            <Label text="New Product" styleClass="page-title"/>
+            <Separator/>
+            <GridPane hgap="16" vgap="12">
+                <Label text="Product ID:"     GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="txtNewProdId" promptText="e.g. PRD-001"
+                           GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="220"/>
+                <Label text="Category:"       GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <HBox spacing="6" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                    <ComboBox fx:id="cbNewCatId" prefWidth="180"/>
+                    <Button text="＋" styleClass="btn-primary" onAction="#openAddCategoryPanel"
+                            prefWidth="34" prefHeight="34"/>
+                </HBox>
+                <Label text="Product Name:"   GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <TextField fx:id="txtNewProdName" promptText="e.g. Organic Fertilizer 50kg"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="220"/>
+                <Label text="Price (₱):"      GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                <TextField fx:id="txtNewPrice" promptText="0.00"
+                           GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="220"/>
+                <Label text="Initial Stock:"  GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                <Spinner fx:id="spnNewStock" editable="true" prefWidth="220"
+                         GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                <Label text="Min Alert Level:" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                <Spinner fx:id="spnMinAlert" editable="true" prefWidth="220"
+                         GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+            </GridPane>
+            <HBox spacing="10">
+                <Button text="💾  Save Product" styleClass="btn-primary" onAction="#saveProduct"/>
+                <Button text="✕  Cancel"        styleClass="btn-danger"  onAction="#closeAddProductPanel"/>
+            </HBox>
+        </VBox>
+
+        <!-- ── Add Category panel ── -->
+        <VBox fx:id="addCategoryPanel" styleClass="card" spacing="14"
+              visible="false" managed="false">
+            <Label text="New Category" styleClass="page-title"/>
+            <Separator/>
+            <GridPane hgap="16" vgap="12">
+                <Label text="Category ID:"    GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <TextField fx:id="txtNewCatId" promptText="e.g. CAT-001"
+                           GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="220"/>
+                <Label text="Category Name:"  GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <TextField fx:id="txtNewCatName" promptText="e.g. Fertilizers"
+                           GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="220"/>
+                <Label text="Description:"    GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <TextField fx:id="txtNewCatDesc" promptText="Optional description"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="220"/>
+            </GridPane>
+            <HBox spacing="10">
+                <Button text="💾  Save Category" styleClass="btn-primary" onAction="#saveCategory"/>
+                <Button text="✕  Cancel"         styleClass="btn-danger"  onAction="#closeAddCategoryPanel"/>
+            </HBox>
+        </VBox>
+
+    </VBox>
+</ScrollPane>

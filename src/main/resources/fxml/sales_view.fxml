@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.cvagrofarmsstore.controllers.SalesController"
+            fitToWidth="true"
+            styleClass="content-area"
+            style="-fx-background-color: transparent; -fx-background: transparent;">
+
+    <VBox spacing="16" styleClass="content-area">
+
+        <!-- ── Page header ── -->
+        <VBox spacing="2">
+            <Label text="Sales" styleClass="page-title"/>
+            <Label text="Build an order with multiple products, then complete it" styleClass="page-subtitle"/>
+        </VBox>
+
+        <Separator/>
+
+        <!-- ── New Order card ── -->
+        <VBox styleClass="card" spacing="14">
+            <Label text="New Order" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+
+            <GridPane hgap="20" vgap="12">
+                <Label text="Product:"         GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                <ComboBox fx:id="cbProduct" promptText="Select a product…" prefWidth="260"
+                          onAction="#onProductSelected"
+                          GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                <Label text="Available Stock:" GridPane.columnIndex="2" GridPane.rowIndex="0"/>
+                <Label fx:id="lblAvailableStock" text="—" styleClass="status-ok"
+                       GridPane.columnIndex="3" GridPane.rowIndex="0"/>
+
+                <Label text="Unit Price (₱):"  GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                <Label fx:id="lblUnitPrice" text="—"
+                       GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <Label text="Quantity:"        GridPane.columnIndex="2" GridPane.rowIndex="1"/>
+                <Spinner fx:id="spnQuantity" editable="true" prefWidth="100"
+                         onKeyReleased="#recalcLineTotal"
+                         GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+
+                <Label text="Line Total (₱):"  GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                <Label fx:id="lblLineTotal" text="₱ 0.00" styleClass="label-muted"
+                       GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <Button text="＋  Add to Order" styleClass="btn-primary" onAction="#addToOrder"
+                        GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+            </GridPane>
+
+            <Separator/>
+
+            <TableView fx:id="tblOrderItems" prefHeight="160">
+                <placeholder><Label text="No items added yet." styleClass="label-muted"/></placeholder>
+                <columns>
+                    <TableColumn fx:id="colItemName"   text="Product"        prefWidth="220"/>
+                    <TableColumn fx:id="colItemQty"    text="Qty"            prefWidth="70"/>
+                    <TableColumn fx:id="colItemUnit"   text="Unit Price (₱)" prefWidth="130"/>
+                    <TableColumn fx:id="colItemTotal"  text="Line Total (₱)" prefWidth="130"/>
+                    <TableColumn fx:id="colItemRemove" text=""               prefWidth="80"/>
+                </columns>
+            </TableView>
+
+            <HBox spacing="16" alignment="CENTER_LEFT">
+                <Label text="Order Total:" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                <Label fx:id="lblOrderTotal" text="₱ 0.00"
+                       style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="✔  Complete Order" styleClass="btn-primary" onAction="#completeOrder"/>
+                <Button text="↺  Clear Order"    styleClass="btn-danger"  onAction="#clearOrder"/>
+                <Label fx:id="lblSaleStatus" text="" styleClass="status-ok"/>
+            </HBox>
+        </VBox>
+
+        <!-- ── Recent transactions ── -->
+        <VBox spacing="8">
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="Recent Transactions" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblTxCount" text="0 records" styleClass="label-muted"/>
+            </HBox>
+            <TableView fx:id="tblSalesLog" prefHeight="300">
+                <placeholder><Label text="No transactions recorded yet." styleClass="label-muted"/></placeholder>
+                <columns>
+                    <TableColumn fx:id="colTxId"     text="Transaction ID" prefWidth="150"/>
+                    <TableColumn fx:id="colTxTime"   text="Timestamp"      prefWidth="160"/>
+                    <TableColumn fx:id="colTxProdId" text="Product ID"     prefWidth="120"/>
+                    <TableColumn fx:id="colTxQty"    text="Qty Sold"       prefWidth="80"/>
+                    <TableColumn fx:id="colTxUnit"   text="Unit Price (₱)" prefWidth="120"/>
+                    <TableColumn fx:id="colTxTotal"  text="Total (₱)"      prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+    </VBox>
+</ScrollPane>

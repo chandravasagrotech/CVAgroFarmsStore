@@ -3,13 +3,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<ScrollPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.cvagrofarmsstore.controllers.DashboardController"
-            fitToWidth="true"
-            styleClass="content-area"
-            style="-fx-background-color: transparent; -fx-background: transparent;">
-
-    <VBox spacing="24" styleClass="content-area">
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cvagrofarmsstore.controllers.DashboardController"
+      spacing="24" styleClass="content-area">
 
         <!-- ── Page header ── -->
         <VBox spacing="2">
@@ -54,7 +50,7 @@
         <VBox styleClass="card" spacing="10">
             <Label text="Low Stock Products" style="-fx-font-weight: bold; -fx-font-size: 14px;"/>
             <Separator/>
-            <TableView fx:id="tblLowStock" prefHeight="300">
+            <TableView fx:id="tblLowStock" prefHeight="220">
                 <placeholder><Label text="All products are sufficiently stocked ✔" styleClass="label-muted"/></placeholder>
                 <columns>
                     <TableColumn fx:id="colLsProdId"  text="Product ID"    prefWidth="130"/>
@@ -66,5 +62,24 @@
             </TableView>
         </VBox>
 
-    </VBox>
-</ScrollPane>
+        <!-- ── Recent Orders table ── -->
+        <VBox styleClass="card" spacing="10">
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Recent Orders" style="-fx-font-weight: bold; -fx-font-size: 14px;" HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblRecentOrderCount" text="" styleClass="label-muted"/>
+            </HBox>
+            <Separator/>
+            <TableView fx:id="tblRecentOrders" prefHeight="220">
+                <placeholder><Label text="No orders recorded yet." styleClass="label-muted"/></placeholder>
+                <columns>
+                    <TableColumn fx:id="colRoTxId"    text="Transaction ID" prefWidth="160"/>
+                    <TableColumn fx:id="colRoTime"    text="Timestamp"      prefWidth="160"/>
+                    <TableColumn fx:id="colRoProdId"  text="Product ID"     prefWidth="120"/>
+                    <TableColumn fx:id="colRoQty"     text="Qty"            prefWidth="70"/>
+                    <TableColumn fx:id="colRoUnit"    text="Unit Price (₱)" prefWidth="120"/>
+                    <TableColumn fx:id="colRoTotal"   text="Total (₱)"      prefWidth="120"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+</VBox>

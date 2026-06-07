@@ -3,13 +3,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<ScrollPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.cvagrofarmsstore.controllers.SalesController"
-            fitToWidth="true"
-            styleClass="content-area"
-            style="-fx-background-color: transparent; -fx-background: transparent;">
-
-    <VBox spacing="16" styleClass="content-area">
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cvagrofarmsstore.controllers.SalesController"
+      spacing="16" styleClass="content-area">
 
         <!-- ── Page header ── -->
         <VBox spacing="2">
@@ -91,5 +87,4 @@
             </TableView>
         </VBox>
 
-    </VBox>
-</ScrollPane>
+</VBox>

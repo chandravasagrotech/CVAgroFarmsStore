@@ -3,13 +3,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<ScrollPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.cvagrofarmsstore.controllers.InventoryController"
-            fitToWidth="true"
-            styleClass="content-area"
-            style="-fx-background-color: transparent; -fx-background: transparent;">
-
-    <VBox spacing="16" styleClass="content-area">
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.cvagrofarmsstore.controllers.InventoryController"
+      spacing="16" styleClass="content-area">
 
         <!-- ── Page header ── -->
         <HBox alignment="CENTER_LEFT" spacing="12">
@@ -141,5 +137,4 @@
             </HBox>
         </VBox>
 
-    </VBox>
-</ScrollPane>
+</VBox>

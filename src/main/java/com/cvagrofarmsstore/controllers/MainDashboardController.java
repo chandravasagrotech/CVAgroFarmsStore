@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -121,7 +122,10 @@ public class MainDashboardController implements Initializable {
             URL resource = getClass().getResource(fxmlPath);
             if (resource == null) throw new IOException("FXML not found: " + fxmlPath);
             Node view = FXMLLoader.load(resource);
-            contentArea.getChildren().setAll(view);
+            ScrollPane scroll = new ScrollPane(view);
+            scroll.setFitToWidth(true);
+            scroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;");
+            contentArea.getChildren().setAll(scroll);
         } catch (Exception e) {
             Throwable cause = e.getCause() != null ? e.getCause() : e;
             Label err = new Label("⚠  Failed to load view: " + fxmlPath + "\n" + cause.getMessage());

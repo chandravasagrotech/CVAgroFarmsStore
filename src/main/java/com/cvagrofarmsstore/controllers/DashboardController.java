@@ -2,6 +2,7 @@ package com.cvagrofarmsstore.controllers;
 
 import com.cvagrofarmsstore.db.ExcelDatabaseManager;
 import com.cvagrofarmsstore.model.Product;
+import com.cvagrofarmsstore.model.SaleRecord;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,6 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -39,13 +41,29 @@ public class DashboardController implements Initializable {
     @FXML private TableColumn<Product, Number>    colLsMinAlert;
     @FXML private TableColumn<Product, String>    colLsStatus;
 
-    private final ObservableList<Product> lowStockList = FXCollections.observableArrayList();
+    @FXML private TableView<SaleRecord>           tblRecentOrders;
+    @FXML private TableColumn<SaleRecord, String> colRoTxId;
+    @FXML private TableColumn<SaleRecord, String> colRoTime;
+    @FXML private TableColumn<SaleRecord, String> colRoProdId;
+    @FXML private TableColumn<SaleRecord, Number> colRoQty;
+    @FXML private TableColumn<SaleRecord, Double> colRoUnit;
+    @FXML private TableColumn<SaleRecord, Double> colRoTotal;
+    @FXML private Label                           lblRecentOrderCount;
+
+    private final ObservableList<Product>    lowStockList    = FXCollections.observableArrayList();
+    private final ObservableList<SaleRecord> recentOrderList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setupLowStockTable();
+        setupRecentOrdersTable();
         tblLowStock.setItems(lowStockList);
+        tblRecentOrders.setItems(recentOrderList);
+        // Load immediately, then reload whenever this view is shown again
         loadStatsAsync();
+        tblRecentOrders.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) loadStatsAsync();
+        });
     }
 
     private void setupLowStockTable() {
@@ -65,6 +83,27 @@ public class DashboardController implements Initializable {
                 setStyle(v.startsWith("🔴")
                         ? "-fx-text-fill: #E57373; -fx-font-weight: bold;"
                         : "-fx-text-fill: #FFB74D; -fx-font-weight: bold;");
+            }
+        });
+    }
+
+    private void setupRecentOrdersTable() {
+        colRoTxId.setCellValueFactory(new PropertyValueFactory<>("transactionId"));
+        colRoTime.setCellValueFactory(new PropertyValueFactory<>("timestamp"));
+        colRoProdId.setCellValueFactory(new PropertyValueFactory<>("productId"));
+        colRoQty.setCellValueFactory(new PropertyValueFactory<>("quantitySold"));
+        colRoUnit.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colRoUnit.setCellFactory(col -> new TableCell<>() {
+            @Override protected void updateItem(Double v, boolean empty) {
+                super.updateItem(v, empty);
+                setText(empty || v == null ? null : String.format("₱ %.2f", v));
+            }
+        });
+        colRoTotal.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
+        colRoTotal.setCellFactory(col -> new TableCell<>() {
+            @Override protected void updateItem(Double v, boolean empty) {
+                super.updateItem(v, empty);
+                setText(empty || v == null ? null : String.format("₱ %.2f", v));
             }
         });
     }
@@ -110,10 +149,14 @@ public class DashboardController implements Initializable {
                 if (row == null) continue;
                 String txId      = cellStr(row, 0);
                 String timestamp = cellStr(row, 1);
+                String prodId    = cellStr(row, 2);
+                int    qty       = (int) cellDbl(row, 3);
+                double unit      = cellDbl(row, 4);
                 double total     = cellDbl(row, 5);
                 if (txId.isEmpty()) continue;
                 allTxIds.add(txId);
                 s.totalRevenue += total;
+                s.recentOrders.add(new SaleRecord(txId, timestamp, prodId, qty, unit, total));
                 if (timestamp.startsWith(today)) {
                     todayTxIds.add(txId);
                     s.todayRevenue += total;
@@ -122,6 +165,9 @@ public class DashboardController implements Initializable {
         }
         s.totalTxCount = allTxIds.size();
         s.todayTxCount = todayTxIds.size();
+        // keep only the 20 most recent rows
+        Collections.reverse(s.recentOrders);
+        if (s.recentOrders.size() > 20) s.recentOrders = s.recentOrders.subList(0, 20);
 
         return s;
     }
@@ -149,6 +195,10 @@ public class DashboardController implements Initializable {
         lblTotalRevenue.setText(String.format("₱ %.2f", s.totalRevenue));
         lblTotalTxCount.setText(s.totalTxCount + " transaction" + (s.totalTxCount != 1 ? "s" : ""));
 
+        recentOrderList.setAll(s.recentOrders);
+        int rc = s.recentOrders.size();
+        lblRecentOrderCount.setText("last " + rc + " record" + (rc != 1 ? "s" : ""));
+
         lowStockList.setAll(s.lowStockProducts);
     }
 
@@ -161,7 +211,8 @@ public class DashboardController implements Initializable {
         double todayRevenue = 0;
         int totalTxCount   = 0;
         int todayTxCount   = 0;
-        List<Product> lowStockProducts = new ArrayList<>();
+        List<Product>    lowStockProducts = new ArrayList<>();
+        List<SaleRecord> recentOrders     = new ArrayList<>();
     }
 
     // ── Cell helpers ──────────────────────────────────────────────────────────
